@@ -1,0 +1,5 @@
+postgresql_version: "13"
+postgresql_port: 5432
+postgresql_db_name: "my_database"
+postgresql_user: "my_user"
+postgresql_password: "my_password"

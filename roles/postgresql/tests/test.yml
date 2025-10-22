@@ -1,0 +1,28 @@
+- hosts: localhost
+  gather_facts: no
+  tasks:
+    - name: Ensure PostgreSQL is installed
+      include_tasks: ../tasks/install.yml
+
+    - name: Configure PostgreSQL
+      include_tasks: ../tasks/config.yml
+
+    - name: Create PostgreSQL users and databases
+      include_tasks: ../tasks/users.yml
+
+    - name: Verify PostgreSQL service is running
+      service:
+        name: postgresql
+        state: started
+        enabled: yes
+
+    - name: Run a simple query to check database connectivity
+      command: psql -U {{ postgres_user }} -d {{ postgres_db }} -c "SELECT 1;"
+      register: query_result
+      ignore_errors: yes
+
+    - name: Assert that the query was successful
+      assert:
+        that:
+          - query_result.rc == 0
+        fail_msg: "PostgreSQL is not responding as expected."

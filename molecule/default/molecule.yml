@@ -1,0 +1,49 @@
+platform: docker
+driver:
+  name: docker
+  options:
+    image: geerlingguy/docker-postgresql9
+    command: /bin/bash
+    privileged: true
+    tty: true
+    env:
+      POSTGRES_USER: "{{ postgres_user }}"
+      POSTGRES_PASSWORD: "{{ postgres_password }}"
+      POSTGRES_DB: "{{ postgres_db }}"
+    volumes:
+      - postgresql_data:/var/lib/postgresql/data
+  network_mode: bridge
+  volumes:
+    - postgresql_data:/var/lib/postgresql/data
+  capabilities:
+    - SYS_ADMIN
+  security_opt:
+    - seccomp:unconfined
+
+provisioner:
+  name: ansible
+  playbook: converge.yml
+  lint:
+    enabled: true
+
+verifier:
+  name: ansible
+  playbook: ../tests/test.yml
+
+scenario:
+  name: default
+  test_sequence:
+    - converge
+    - verify
+
+suites:
+  - name: default
+    provisioner:
+      options:
+        inventory: ../tests/inventory
+    verifier:
+      options:
+        inventory: ../tests/inventory
+
+volumes:
+  postgresql_data: {}

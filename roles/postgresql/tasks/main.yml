@@ -1,0 +1,8 @@
+- name: Include PostgreSQL installation tasks
+  include_tasks: install.yml
+
+- name: Include PostgreSQL configuration tasks
+  include_tasks: config.yml
+
+- name: Include PostgreSQL user management tasks
+  include_tasks: users.yml

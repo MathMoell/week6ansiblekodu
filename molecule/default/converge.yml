@@ -1,0 +1,5 @@
+- name: Converge PostgreSQL role
+  hosts: all
+  become: true
+  roles:
+    - postgresql

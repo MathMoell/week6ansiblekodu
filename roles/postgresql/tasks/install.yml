@@ -1,0 +1,29 @@
+- name: Install PostgreSQL
+  apt:
+    name: "{{ postgresql_package }}"
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install PostgreSQL
+  yum:
+    name: "{{ postgresql_package }}"
+    state: present
+  when: ansible_os_family == "RedHat"
+
+- name: Ensure PostgreSQL is started and enabled
+  service:
+    name: postgresql
+    state: started
+    enabled: true
+
+- name: Install PostgreSQL client
+  apt:
+    name: "{{ postgresql_client_package }}"
+    state: present
+  when: ansible_os_family == "Debian"
+
+- name: Install PostgreSQL client
+  yum:
+    name: "{{ postgresql_client_package }}"
+    state: present
+  when: ansible_os_family == "RedHat"

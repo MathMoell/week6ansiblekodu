@@ -1,0 +1,16 @@
+- name: Ensure PostgreSQL user exists
+  postgresql_user:
+    name: "{{ item.name }}"
+    password: "{{ item.password }}"
+    role_attr_flags: "{{ item.role_attr_flags | default('LOGIN') }}"
+    state: present
+  loop: "{{ postgres_users }}"
+  when: postgres_users is defined
+
+- name: Ensure PostgreSQL database exists
+  postgresql_db:
+    name: "{{ item.name }}"
+    owner: "{{ item.owner }}"
+    state: present
+  loop: "{{ postgres_databases }}"
+  when: postgres_databases is defined

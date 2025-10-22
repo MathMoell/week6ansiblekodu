@@ -1,0 +1,33 @@
+- name: Ensure PostgreSQL configuration directory exists
+  file:
+    path: "{{ postgresql_config_dir }}"
+    state: directory
+    owner: postgres
+    group: postgres
+    mode: '0755'
+
+- name: Configure PostgreSQL main configuration file
+  template:
+    src: postgresql.conf.j2
+    dest: "{{ postgresql_config_dir }}/postgresql.conf"
+  notify: Restart PostgreSQL
+
+- name: Configure pg_hba.conf for client authentication
+  template:
+    src: pg_hba.conf.j2
+    dest: "{{ postgresql_config_dir }}/pg_hba.conf"
+  notify: Reload PostgreSQL
+
+- name: Ensure PostgreSQL is configured to listen on the correct address
+  lineinfile:
+    path: "{{ postgresql_config_dir }}/postgresql.conf"
+    regexp: '^#listen_addresses'
+    line: "listen_addresses = '{{ postgresql_listen_addresses }}'"
+  notify: Restart PostgreSQL
+
+- name: Ensure PostgreSQL is using the correct port
+  lineinfile:
+    path: "{{ postgresql_config_dir }}/postgresql.conf"
+    regexp: '^#port'
+    line: "port = {{ postgresql_port }}"
+  notify: Restart PostgreSQL

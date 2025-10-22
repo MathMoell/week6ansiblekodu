@@ -1,0 +1,22 @@
+# pg_hba.conf.j2
+
+# PostgreSQL Client Authentication Configuration File
+# This file is generated based on the provided variables.
+
+# TYPE  DATABASE        USER            ADDRESS                 METHOD
+
+# Local connections
+local   all             all                                     peer
+
+# IPv4 local connections:
+host    all             all             127.0.0.1/32          md5
+
+# IPv6 local connections:
+host    all             all             ::1/128               md5
+
+# Allow connections from specific IP addresses
+{% for ip in allowed_ips %}
+host    all             all             {{ ip }}/32           md5
+{% endfor %}
+
+# Additional rules can be added below as needed.

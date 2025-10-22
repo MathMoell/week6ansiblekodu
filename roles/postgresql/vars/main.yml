@@ -1,0 +1,8 @@
+package_name: "postgresql"
+package_name_alt: "postgresql-server"
+config_directory: "/etc/postgresql"
+data_directory: "/var/lib/postgresql"
+log_directory: "/var/log/postgresql"
+service_name: "postgresql"
+default_port: 5432
+default_version: "14"

@@ -1,0 +1,11 @@
+- name: Restart PostgreSQL
+  service:
+    name: postgresql
+    state: restarted
+  when: postgresql_config_changed
+
+- name: Reload PostgreSQL
+  service:
+    name: postgresql
+    state: reloaded
+  when: postgresql_config_changed
